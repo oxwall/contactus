@@ -87,9 +87,13 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         $fieldMessage->setRequired();
         $form->addElement($fieldMessage);
 
-        $fieldCaptcha = new CaptchaField('captcha');
-        $fieldCaptcha->setLabel($this->text('contactus', 'form_label_captcha'));
-        $form->addElement($fieldCaptcha);
+        if ( !OW::getUser()->isAuthenticated() )
+        {
+            $fieldCaptcha = new CaptchaField('captcha');
+            $fieldCaptcha->setLabel($this->text('contactus', 'form_label_captcha'));
+            $form->addElement($fieldCaptcha);
+            $this->assign('captcha_present', 'true');
+        }
 
         $submit = new Submit('send');
         $submit->setValue($this->text('contactus', 'form_label_submit'));
