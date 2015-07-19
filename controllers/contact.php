@@ -52,6 +52,10 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
             $contactEmails[$contact->id]['label'] = CONTACTUS_BOL_Service::getInstance()->getDepartmentLabel($contact->id);
             $contactEmails[$contact->id]['email'] = $contact->email;
         }
+        
+        $config = OW::getConfig();
+        $userService = BOL_UserSerivce::getInstance();
+        $user = OW::getUser();
 
         $form = new Form('contact_form');
 
@@ -64,15 +68,33 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         $fieldTo->setHasInvitation(false);
         $fieldTo->setLabel($this->text('contactus', 'form_label_to'));
         $form->addElement($fieldTo);
+        
+        $fieldName = new TextField('name');
+        $fieldName->setLabel($this->text('contactus', 'form_label_name')); // TODO: Add language string in langs.zip
+        $fieldName->setRequired();
+        
+        if ( $user->isAuthenticated() )
+        {
+            if ( $config->getValue('base', 'display_name_question') == 'username' )
+            {
+                $fieldName->setValue($userService->getUserName($user->getId()));
+            }
+            else if ( $config->getValue('base', 'display_name_question') == 'realname' )
+            {
+                $fieldName->setValue($userService->getDisplayName($user->getId()));
+            }
+        }
+        
+        $form->addElement($fieldName);
 
         $fieldFrom = new TextField('from');
         $fieldFrom->setLabel($this->text('contactus', 'form_label_from'));
         $fieldFrom->setRequired();
         $fieldFrom->addValidator(new EmailValidator());
         
-        if ( ow::getUser()->isAuthenticated() )
+        if ( $user->isAuthenticated() )
         {
-            $fieldFrom->setValue( OW::getUser()->getEmail() );
+            $fieldFrom->setValue( $user->getEmail() );
         }
         
         $form->addElement($fieldFrom);
@@ -111,7 +133,7 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
 
                 $mail = OW::getMailer()->createMail();
                 $mail->addRecipientEmail($contactEmails[$data['to']]['email']);
-                $mail->setSender($data['from']);
+                $mail->setSender($data['from'], $data['name']);
                 $mail->setSenderSuffix(false);
                 $mail->setSubject($data['subject']);
                 $mail->setTextContent($data['message']);
