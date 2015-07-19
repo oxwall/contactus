@@ -73,13 +73,16 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         $fieldName->setLabel($this->text('contactus', 'form_label_name')); // TODO: Add language string in langs.zip
         $fieldName->setRequired();
         
-        if ( $config->getValue('base', 'display_name_question') == 'username' )
+        if ( $user->isAuthenticated() )
         {
-            $fieldName->setValue($userService->getUserName($user->getId()));
-        }
-        else if ( $config->getValue('base', 'display_name_question') == 'realname' )
-        {
-            $fieldName->setValue($userService->getDisplayName($user->getId()));
+            if ( $config->getValue('base', 'display_name_question') == 'username' )
+            {
+                $fieldName->setValue($userService->getUserName($user->getId()));
+            }
+            else if ( $config->getValue('base', 'display_name_question') == 'realname' )
+            {
+                $fieldName->setValue($userService->getDisplayName($user->getId()));
+            }
         }
         
         $form->addElement($fieldName);
