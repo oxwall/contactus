@@ -70,7 +70,7 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         $fieldFrom->setRequired();
         $fieldFrom->addValidator(new EmailValidator());
         
-        if ( ow::getUser()->isAuthenticated() )
+        if ( OW::getUser()->isAuthenticated() )
         {
             $fieldFrom->setValue( OW::getUser()->getEmail() );
         }
