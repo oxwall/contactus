@@ -122,6 +122,17 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
                 OW::getMailer()->addToQueue($mail);
 
                 OW::getSession()->set('contactus.dept', $contactEmails[$data['to']]['label']);
+                
+                $event = new OW_Event('contactus.send_message', array(
+                    'userId' => OW::getUser()->getId()
+                ), array(
+                    'message' => $data['message'],
+                    'subject' => $data['subject'],
+                    'from' => $data['from']
+                ));
+
+                OW::getEventManager()->trigger($event);
+                
                 $this->redirectToAction('sent');
             }
         }
