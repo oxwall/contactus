@@ -125,6 +125,16 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
                 $this->redirectToAction('sent');
             }
         }
+
+        $params = array(
+            "sectionKey" => "base",
+            "entityKey" => "contatcus",
+            "title" => "contatcus+meta_title_contactus",
+            "description" => "contatcus+meta_desc_contactus",
+            "keywords" => "contatcus+meta_keywords_contactus"
+        );
+
+        OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
 
     public function sent()
