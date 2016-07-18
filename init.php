@@ -52,3 +52,22 @@ function contactus_ads_enabled( BASE_CLASS_EventCollector $event )
 OW::getEventManager()->bind('ads.enabled_plugins', 'contactus_ads_enabled');
 
 OW::getRequestHandler()->addCatchAllRequestsExclude('base.suspended_user', 'CONTACTUS_CTRL_Contact');
+
+OW::getEventManager()->bind("base.collect_seo_meta_data", function ( BASE_CLASS_EventCollector $e )
+{
+    $language = OW::getLanguage();
+
+    $e->add(array(
+        "sectionLabel" => $language->text("base", "seo_meta_section_base_pages"),
+        "sectionKey" => "base.base_pages",
+        "entityKey" => "contatcus",
+        "entityLabel" => $language->text("contactus", "seo_meta_contactus_label"),
+        "iconClass" => "ow_ic_mail",
+        "langs" => array(
+            "title" => "contatcus+meta_title_contactus",
+            "description" => "contatcus+meta_desc_contactus",
+            "keywords" => "contatcus+meta_keywords_contactus"
+        ),
+        "vars" => array("site_name")
+    ));
+});
