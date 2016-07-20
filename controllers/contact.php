@@ -128,10 +128,10 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
 
         $params = array(
             "sectionKey" => "base",
-            "entityKey" => "contatcus",
-            "title" => "contatcus+meta_title_contactus",
-            "description" => "contatcus+meta_desc_contactus",
-            "keywords" => "contatcus+meta_keywords_contactus"
+            "entityKey" => "contactus",
+            "title" => "contactus+meta_title_contactus",
+            "description" => "contactus+meta_desc_contactus",
+            "keywords" => "contactus+meta_keywords_contactus"
         );
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
