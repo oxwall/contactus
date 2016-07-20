@@ -60,13 +60,13 @@ OW::getEventManager()->bind("base.collect_seo_meta_data", function ( BASE_CLASS_
     $e->add(array(
         "sectionLabel" => $language->text("base", "seo_meta_section_base_pages"),
         "sectionKey" => "base.base_pages",
-        "entityKey" => "contatcus",
+        "entityKey" => "contactus",
         "entityLabel" => $language->text("contactus", "seo_meta_contactus_label"),
         "iconClass" => "ow_ic_mail",
         "langs" => array(
-            "title" => "contatcus+meta_title_contactus",
-            "description" => "contatcus+meta_desc_contactus",
-            "keywords" => "contatcus+meta_keywords_contactus"
+            "title" => "contactus+meta_title_contactus",
+            "description" => "contactus+meta_desc_contactus",
+            "keywords" => "contactus+meta_keywords_contactus"
         ),
         "vars" => array("site_name")
     ));
