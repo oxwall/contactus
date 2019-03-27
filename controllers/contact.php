@@ -119,7 +119,10 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
                 $mail->setSenderSuffix(false);
                 $mail->setSubject($data['subject']);
                 $mail->setTextContent($data['message']);
+                $mail->setReplyTo($data['from']);
+
                 OW::getMailer()->addToQueue($mail);
+
 
                 OW::getSession()->set('contactus.dept', $contactEmails[$data['to']]['label']);
                 $this->redirectToAction('sent');
