@@ -53,9 +53,9 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
             $contactEmails[$contact->id]['email'] = $contact->email;
         }
 
-        $form = new Form('contact_form');
+        $form = new Form('contact_form', CONTACTUS_BOL_Service::PLUGIN_KEY);
 
-        $fieldTo = new Selectbox('to');
+        $fieldTo = new Selectbox('to', CONTACTUS_BOL_Service::PLUGIN_KEY);
         foreach ( $contactEmails as $id => $value )
         {
             $fieldTo->addOption($id, $value['label']);
@@ -65,7 +65,7 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         $fieldTo->setLabel($this->text('contactus', 'form_label_to'));
         $form->addElement($fieldTo);
 
-        $fieldFrom = new TextField('from');
+        $fieldFrom = new TextField('from', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $fieldFrom->setLabel($this->text('contactus', 'form_label_from'));
         $fieldFrom->setRequired();
         $fieldFrom->addValidator(new EmailValidator());
@@ -77,12 +77,12 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         
         $form->addElement($fieldFrom);
 
-        $fieldSubject = new TextField('subject');
+        $fieldSubject = new TextField('subject', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $fieldSubject->setLabel($this->text('contactus', 'form_label_subject'));
         $fieldSubject->setRequired();
         $form->addElement($fieldSubject);
 
-        $fieldMessage = new Textarea('message');
+        $fieldMessage = new Textarea('message', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $fieldMessage->setLabel($this->text('contactus', 'form_label_message'));
         $fieldMessage->setRequired();
         $form->addElement($fieldMessage);
@@ -95,7 +95,7 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
             $this->assign('captcha_present', 'true');
         }
 
-        $submit = new Submit('send');
+        $submit = new Submit('send', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $submit->setValue($this->text('contactus', 'form_label_submit'));
         $form->addElement($submit);
 

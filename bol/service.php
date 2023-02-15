@@ -38,6 +38,8 @@
  */
 class CONTACTUS_BOL_Service
 {
+    const PLUGIN_KEY = 'contactus';
+
     /**
      * Singleton instance.
      *
