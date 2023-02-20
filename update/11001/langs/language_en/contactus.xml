@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<prefix name="contactus" label="Contact Us" language_tag="en" language_label="English">
+    <key name="menu_dept_label">
+        <value>Departments</value>
+    </key>
+    <key name="menu_sender_label">
+        <value>Sender email</value>
+    </key>
+    <key name="admin_sender_heading">
+        <value>Contact us: Sender email</value>
+    </key>
+    <key name="admin_sender_title">
+        <value>Contact us: Sender email</value>
+    </key>
+    <key name="sender_email_label">
+        <value>Sender email</value>
+    </key>
+    <key name="sender_email_desc">
+        <value>This email will be used as the sender address. If the sender's email is not specified, the email of the selected department will be used.</value>
+    </key>
+    <key name="form_save_sender_btn">
+        <value>Save</value>
+    </key>
+    <key name="sender_email_saved">
+        <value>Email successfully saved.</value>
+    </key>
+</prefix>

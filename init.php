@@ -31,6 +31,7 @@
 
 OW::getRouter()->addRoute(new OW_Route('contactus.index', 'contact', "CONTACTUS_CTRL_Contact", 'index'));
 OW::getRouter()->addRoute(new OW_Route('contactus.admin', 'admin/plugins/contactus', "CONTACTUS_CTRL_Admin", 'dept'));
+OW::getRouter()->addRoute(new OW_Route('contactus.admin_sender', 'admin/plugins/contactus/sender', "CONTACTUS_CTRL_Admin", 'sender'));
 
 function contactus_handler_after_install( BASE_CLASS_EventCollector $event )
 {

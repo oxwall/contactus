@@ -40,7 +40,12 @@ ENGINE=MyISAM
 ROW_FORMAT=DEFAULT";
 //installing database
 OW::getDbo()->query($sql);
+
+OW::getConfig()->addConfig('contactus', 'sender_email', '');
+
 //installing language pack
 OW::getLanguage()->importPluginLangs(OW::getPluginManager()->getPlugin('contactus')->getRootDir().'langs.zip', 'contactus');
+OW::getLanguage()->importLangsFromDir(OW::getPluginManager()->getPlugin('contactus')->getRootDir().'langs', true);
+
 //adding admin settings page
 OW::getPluginManager()->addPluginSettingsRouteName('contactus', 'contactus.admin');

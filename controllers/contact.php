@@ -53,9 +53,9 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
             $contactEmails[$contact->id]['email'] = $contact->email;
         }
 
-        $form = new Form('contact_form');
+        $form = new Form('contact_form', CONTACTUS_BOL_Service::PLUGIN_KEY);
 
-        $fieldTo = new Selectbox('to');
+        $fieldTo = new Selectbox('to', CONTACTUS_BOL_Service::PLUGIN_KEY);
         foreach ( $contactEmails as $id => $value )
         {
             $fieldTo->addOption($id, $value['label']);
@@ -65,24 +65,12 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         $fieldTo->setLabel($this->text('contactus', 'form_label_to'));
         $form->addElement($fieldTo);
 
-        $fieldFrom = new TextField('from');
-        $fieldFrom->setLabel($this->text('contactus', 'form_label_from'));
-        $fieldFrom->setRequired();
-        $fieldFrom->addValidator(new EmailValidator());
-        
-        if ( OW::getUser()->isAuthenticated() )
-        {
-            $fieldFrom->setValue( OW::getUser()->getEmail() );
-        }
-        
-        $form->addElement($fieldFrom);
-
-        $fieldSubject = new TextField('subject');
+        $fieldSubject = new TextField('subject', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $fieldSubject->setLabel($this->text('contactus', 'form_label_subject'));
         $fieldSubject->setRequired();
         $form->addElement($fieldSubject);
 
-        $fieldMessage = new Textarea('message');
+        $fieldMessage = new Textarea('message', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $fieldMessage->setLabel($this->text('contactus', 'form_label_message'));
         $fieldMessage->setRequired();
         $form->addElement($fieldMessage);
@@ -95,7 +83,7 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
             $this->assign('captcha_present', 'true');
         }
 
-        $submit = new Submit('send');
+        $submit = new Submit('send', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $submit->setValue($this->text('contactus', 'form_label_submit'));
         $form->addElement($submit);
 
@@ -113,16 +101,18 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
                     return;
                 }
 
+                $senderEmail = CONTACTUS_BOL_Service::getInstance()->getSender();
+                $senderEmail = empty($senderEmail) ? $contactEmails[$data['to']]['email'] : $senderEmail;
+
                 $mail = OW::getMailer()->createMail();
                 $mail->addRecipientEmail($contactEmails[$data['to']]['email']);
-                $mail->setSender($data['from']);
+                $mail->setSender($senderEmail);
                 $mail->setSenderSuffix(false);
                 $mail->setSubject($data['subject']);
                 $mail->setTextContent($data['message']);
-                $mail->setReplyTo($data['from']);
+                $mail->setReplyTo($senderEmail);
 
                 OW::getMailer()->addToQueue($mail);
-
 
                 OW::getSession()->set('contactus.dept', $contactEmails[$data['to']]['label']);
                 $this->redirectToAction('sent');

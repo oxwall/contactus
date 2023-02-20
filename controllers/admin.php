@@ -38,6 +38,34 @@
 class CONTACTUS_CTRL_Admin extends ADMIN_CTRL_Abstract
 {
 
+    public function init()
+    {
+        parent::init();
+
+        $handler = OW::getRequestHandler()->getHandlerAttributes();
+        $menus = array();
+
+        $dept = new BASE_MenuItem();
+        $dept->setLabel(OW::getLanguage()->text('contactus', 'menu_dept_label'));
+        $dept->setUrl(OW::getRouter()->urlForRoute('contactus.admin'));
+        $dept->setActive($handler[OW_RequestHandler::ATTRS_KEY_ACTION] === 'dept');
+        $dept->setKey('dept');
+        $dept->setIconClass('ow_ic_mail');
+        $dept->setOrder(0);
+        $menus[] = $dept;
+
+        $sender = new BASE_MenuItem();
+        $sender->setLabel(OW::getLanguage()->text('contactus', 'menu_sender_label'));
+        $sender->setUrl(OW::getRouter()->urlForRoute('contactus.admin_sender'));
+        $sender->setActive($handler[OW_RequestHandler::ATTRS_KEY_ACTION] === 'sender');
+        $sender->setKey('sender');
+        $sender->setIconClass('ow_ic_mail');
+        $sender->setOrder(1);
+        $menus[] = $sender;
+
+        $this->addComponent('menu', new BASE_CMP_ContentMenu($menus));
+    }
+
     public function dept()
     {
         $this->setPageTitle(OW::getLanguage()->text('contactus', 'admin_dept_title'));
@@ -82,6 +110,41 @@ class CONTACTUS_CTRL_Admin extends ADMIN_CTRL_Abstract
             {
                 $data = $form->getValues();
                 CONTACTUS_BOL_Service::getInstance()->addDepartment($data['email'], $data['label']);
+                $this->redirect();
+            }
+        }
+    }
+
+    public function sender()
+    {
+        $this->setPageTitle(OW::getLanguage()->text('contactus', 'admin_sender_title'));
+        $this->setPageHeading(OW::getLanguage()->text('contactus', 'admin_sender_heading'));
+
+        $senderEmail = CONTACTUS_BOL_Service::getInstance()->getSender();
+
+        $form = new Form('set_sender');
+        $this->addForm($form);
+
+        $fieldEmail = new TextField('email');
+        $fieldEmail->setValue($senderEmail);
+        $fieldEmail->setLabel(OW::getLanguage()->text('contactus', 'sender_email_label'));
+        $fieldEmail->setDescription(OW::getLanguage()->text('contactus', 'sender_email_desc'));
+        $fieldEmail->addValidator(new EmailValidator());
+        $fieldEmail->setInvitation(OW::getLanguage()->text('contactus', 'label_invitation_email'));
+        $fieldEmail->setHasInvitation(true);
+        $form->addElement($fieldEmail);
+
+        $submit = new Submit('submit');
+        $submit->setValue(OW::getLanguage()->text('contactus', 'form_save_sender_btn'));
+        $form->addElement($submit);
+
+        if ( OW::getRequest()->isPost() )
+        {
+            if ( $form->isValid($_POST) )
+            {
+                $data = $form->getValues();
+                CONTACTUS_BOL_Service::getInstance()->saveSender($data['email']);
+                OW::getFeedback()->info(OW::getLanguage()->text('contactus', 'sender_email_saved'));
                 $this->redirect();
             }
         }

@@ -38,6 +38,8 @@
  */
 class CONTACTUS_BOL_Service
 {
+    const PLUGIN_KEY = 'contactus';
+
     /**
      * Singleton instance.
      *
@@ -94,13 +96,34 @@ class CONTACTUS_BOL_Service
         }
     }
 
-    private function getDepartmentKey( $name )
-    {
-        return 'dept_' . trim($name);
-    }
-
     public function getDepartmentList()
     {
         return CONTACTUS_BOL_DepartmentDao::getInstance()->findAll();
+    }
+
+    /**
+     * Get sender's email.
+     *
+     * @return string|null
+     */
+    public function getSender()
+    {
+        return OW::getConfig()->getValue(self::PLUGIN_KEY, 'sender_email');
+    }
+
+    /**
+     * Save senders email.
+     *
+     * @param $email
+     * @return void
+     */
+    public function saveSender($email)
+    {
+        OW::getConfig()->saveConfig(self::PLUGIN_KEY, 'sender_email', trim($email));
+    }
+
+    private function getDepartmentKey( $name )
+    {
+        return 'dept_' . trim($name);
     }
 }
