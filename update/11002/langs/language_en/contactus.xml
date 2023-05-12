@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<prefix name="contactus" label="Contact Us" language_tag="en" language_label="English">
+    <key name="please_reply_to">
+        <value>Please, reply to: </value>
+    </key>
+</prefix>

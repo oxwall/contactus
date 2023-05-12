@@ -65,6 +65,18 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
         $fieldTo->setLabel($this->text('contactus', 'form_label_to'));
         $form->addElement($fieldTo);
 
+        $fieldFrom = new TextField('from');
+        $fieldFrom->setLabel($this->text('contactus', 'form_label_from'));
+        $fieldFrom->setRequired();
+        $fieldFrom->addValidator(new EmailValidator());
+        
+        if ( OW::getUser()->isAuthenticated() )
+        {
+            $fieldFrom->setValue( OW::getUser()->getEmail() );
+        }
+        
+        $form->addElement($fieldFrom);
+
         $fieldSubject = new TextField('subject', CONTACTUS_BOL_Service::PLUGIN_KEY);
         $fieldSubject->setLabel($this->text('contactus', 'form_label_subject'));
         $fieldSubject->setRequired();
@@ -104,12 +116,16 @@ class CONTACTUS_CTRL_Contact extends OW_ActionController
                 $senderEmail = CONTACTUS_BOL_Service::getInstance()->getSender();
                 $senderEmail = empty($senderEmail) ? $contactEmails[$data['to']]['email'] : $senderEmail;
 
+                // add from-email to message
+                $data['message'] = $data['message'] . "<br/><br/>" . OW::getLanguage()->text('contactus', 'please_reply_to') . " <a href='mailto:" . $data['from'] . "'>" . $data['from'] . "</a>";
+
                 $mail = OW::getMailer()->createMail();
                 $mail->addRecipientEmail($contactEmails[$data['to']]['email']);
                 $mail->setSender($senderEmail);
                 $mail->setSenderSuffix(false);
                 $mail->setSubject($data['subject']);
                 $mail->setTextContent($data['message']);
+                $mail->setHtmlContent($data['message']);
                 $mail->setReplyTo($senderEmail);
 
                 OW::getMailer()->addToQueue($mail);
