@@ -24,4 +24,7 @@
     <key name="sender_email_saved">
         <value>Email successfully saved.</value>
     </key>
+    <key name="please_reply_to">
+        <value>Please, reply to: </value>
+    </key>
 </prefix>
